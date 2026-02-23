@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jatin Verma — Full Stack GenAI Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              green: {
+                DEFAULT: "#00ff88",
+                dim: "#00cc6a",
+              },
+              bg: {
+                DEFAULT: "#050a06",
+                2: "#0a110b",
+                3: "#0f1a11",
+              },
+              border: "#1a2e1c",
+              text: "#c8e6cc",
+              muted: "#5a7a5e",
+            },
+            fontFamily: {
+              mono: ['"Space Mono"', "monospace"],
+              sans: ['"Syne"', "sans-serif"],
+            },
+            animation: {
+              blink: "blink 1s step-end infinite",
+              typing:
+                "typing 2.5s steps(30) 0.5s forwards, caret 0.7s step-end infinite",
+              glitch1: "glitch1 0.3s infinite",
+              glitch2: "glitch2 0.3s infinite",
+            },
+            keyframes: {
+              blink: {
+                "0%, 100%": { opacity: "1" },
+                "50%": { opacity: "0" },
+              },
+              typing: {
+                to: { width: "100%" },
+              },
+              caret: {
+                "0%, 100%": { borderColor: "#00ff88" },
+                "50%": { borderColor: "transparent" },
+              },
+              glitch1: {
+                "0%, 100%": {
+                  clipPath: "inset(0 0 80% 0)",
+                  transform: "translateX(-2px)",
+                },
+                "50%": {
+                  clipPath: "inset(50% 0 30% 0)",
+                  transform: "translateX(2px)",
+                },
+              },
+              glitch2: {
+                "0%, 100%": {
+                  clipPath: "inset(60% 0 0 0)",
+                  transform: "translateX(2px)",
+                },
+                "50%": {
+                  clipPath: "inset(10% 0 60% 0)",
+                  transform: "translateX(-2px)",
+                },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .grid-bg {
+          background-image:
+            linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+          background-size: 40px 40px;
+        }
+        .glow {
+          @apply text-green;
+          text-shadow:
+            0 0 8px rgba(0, 255, 136, 0.5),
+            0 0 20px rgba(0, 255, 136, 0.2);
+        }
+      }
+
+      @layer components {
+        .card {
+          @apply bg-bg-2 border border-border transition-all duration-300;
+        }
+        .card:hover {
+          @apply border-green-dim -translate-y-[3px];
+          box-shadow: 0 0 30px rgba(0, 255, 136, 0.07);
+        }
+
+        .tag {
+          @apply inline-block bg-[#00ff88]/[0.08] border border-[#00ff88]/20 text-green text-[0.7rem] px-2 py-[2px] rounded-sm font-mono;
+        }
+
+        .section-label {
+          @apply text-[0.7rem] tracking-[0.2em] text-green uppercase font-mono;
+        }
+
+        .section-title {
+          @apply font-sans font-extrabold text-[#e8f5e9];
+        }
+
+        .proj-link {
+          @apply text-green no-underline text-[0.7rem] border border-[#00ff88]/30 px-[10px] py-[3px] transition-colors duration-200;
+        }
+        .proj-link:hover {
+          @apply bg-[#00ff88]/10;
+        }
+
+        .contact-link {
+          @apply flex items-center gap-[10px] text-text no-underline text-[0.8rem] py-[10px] px-[14px] border border-border transition-colors duration-200;
+        }
+        .contact-link:hover {
+          @apply border-green text-green;
+        }
+
+        .skill-bar-wrap {
+          @apply bg-border h-[2px] w-full rounded-sm;
+        }
+
+        .skill-bar {
+          @apply h-[2px] bg-green rounded-sm scale-x-0 origin-left transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)];
+          box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+        }
+
+        /* Typewriter text */
+        .typewriter {
+          @apply overflow-hidden whitespace-nowrap border-r-2 border-green w-0 animate-typing;
+        }
+      }
+
+      /* Scanlines overlay */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.08) 2px,
+          rgba(0, 0, 0, 0.08) 4px
+        );
+        pointer-events: none;
+        z-index: 9999;
+      }
+
+      /* Noise grain */
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 9998;
+        opacity: 0.4;
+      }
+
+      /* Cursor blink */
+      .cursor::after {
+        content: "_";
+        @apply animate-blink text-green;
+      }
+
+      /* Fade-in on scroll */
+      .reveal {
+        @apply opacity-0 translate-y-6 transition-all duration-700 ease-out;
+      }
+      .reveal.visible {
+        @apply opacity-100 translate-y-0;
+      }
+
+      /* Skill bar animate */
+      .skill-bar.animate {
+        transform: scaleX(1);
+      }
+
+      /* Glitch effect on hover for name */
+      .glitch {
+        position: relative;
+      }
+      .glitch:hover::before,
+      .glitch:hover::after {
+        content: attr(data-text);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        color: #00ff88;
+      }
+      .glitch:hover::before {
+        text-shadow: -2px 0 #ff0055;
+        animation: glitch1 0.3s infinite;
+      }
+      .glitch:hover::after {
+        text-shadow: 2px 0 #00aaff;
+        animation: glitch2 0.3s infinite;
+      }
+
+      ::-webkit-scrollbar {
+        width: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        @apply bg-bg;
+      }
+      ::-webkit-scrollbar-thumb {
+        @apply bg-border rounded-sm;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        @apply bg-green-dim;
+      }
+    </style>
+  </head>
+  <body class="bg-bg text-text font-mono overflow-x-hidden grid-bg">
+    <!-- NAV -->
+    <nav
+      class="fixed top-0 w-full z-[100] bg-[#050a06]/90 backdrop-blur-md border-b border-border"
+    >
+      <div
+        class="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between"
+      >
+        <span class="glow text-sm font-bold"
+          >JV<span class="text-muted">.dev</span></span
+        >
+        <div class="flex gap-6">
+          <a
+            href="#about"
+            class="text-xs text-muted hover:text-green transition-colors"
+            >about</a
+          >
+          <a
+            href="#projects"
+            class="text-xs text-muted hover:text-green transition-colors"
+            >projects</a
+          >
+          <a
+            href="#skills"
+            class="text-xs text-muted hover:text-green transition-colors"
+            >skills</a
+          >
+          <a
+            href="#contact"
+            class="text-xs text-muted hover:text-green transition-colors"
+            >contact</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="about" class="min-h-screen flex items-center pt-14">
+      <div class="max-w-5xl mx-auto px-6 py-24 w-full">
+        <div class="mb-6">
+          <span class="section-label">// initializing...</span>
+        </div>
+
+        <div class="mb-4 text-muted text-sm font-mono">
+          <span class="glow">root@portfolio</span>:<span class="text-blue-400"
+            >~</span
+          >$ whoami
+        </div>
+
+        <h1
+          class="glitch text-6xl md:text-8xl font-extrabold mb-2 tracking-tight section-title leading-none"
+          data-text="Jatin Verma"
+          style=""
+        >
+          Jatin Verma
+        </h1>
+
+        <div class="mb-8 overflow-hidden">
+          <p class="typewriter text-green text-lg md:text-xl font-mono mt-3">
+            Full Stack GenAI Developer
+          </p>
+        </div>
+
+        <p class="text-muted text-sm leading-relaxed max-w-xl mb-10 font-mono">
+          I build AI-powered products — from LLM chat apps to autonomous
+          code-generation sandboxes.<br />
+          B.Tech EE grad turned full-stack builder. Based in India.
+        </p>
+
+        <div class="flex flex-wrap gap-3">
+          <a href="#projects" class="proj-link">→ view projects</a>
+          <a href="#contact" class="proj-link">→ get in touch</a>
+        </div>
+
+        <!-- Terminal window decoration -->
+        <div class="mt-16 card rounded-lg max-w-lg">
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-border">
+            <span class="w-3 h-3 rounded-full bg-red-500/60"></span>
+            <span class="w-3 h-3 rounded-full bg-yellow-500/60"></span>
+            <span class="w-3 h-3 rounded-full bg-green-500/60"></span>
+            <span class="ml-3 text-xs text-muted">jatin@portfolio:~</span>
+          </div>
+          <div class="p-5 text-sm font-mono space-y-2">
+            <div>
+              <span class="glow">$</span>
+              <span class="text-text">cat stack.json</span>
+            </div>
+            <div class="text-muted leading-6 pl-4">
+              {<br />
+              &nbsp;&nbsp;<span class="text-yellow-400">"frontend"</span>:
+              <span class="text-emerald-400">"React, Next.js, TypeScript"</span
+              >,<br />
+              &nbsp;&nbsp;<span class="text-yellow-400">"backend"</span>:
+              <span class="text-emerald-400">"Node.js, Express, REST"</span
+              >,<br />
+              &nbsp;&nbsp;<span class="text-yellow-400">"ai"</span>:
+              <span class="text-emerald-400">"OpenRouter, E2B, Inngest"</span
+              >,<br />
+              &nbsp;&nbsp;<span class="text-yellow-400">"db"</span>:
+              <span class="text-emerald-400">"PostgreSQL, MongoDB, Prisma"</span
+              ><br />
+              }
+            </div>
+            <div>
+              <span class="glow">$</span>
+              <span class="text-text cursor">_</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="py-24">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="reveal mb-12">
+          <p class="section-label mb-2">// projects</p>
+          <h2 class="section-title text-4xl md:text-5xl">Things I've Built</h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-5">
+          <!-- Vibe0 -->
+          <div class="card reveal p-6 rounded-lg flex flex-col gap-4">
+            <div class="flex items-start justify-between">
+              <span class="text-2xl">⚡</span>
+              <div class="flex gap-2">
+                <a href="https://vibe0-sandbox.vercel.app" class="proj-link"
+                  >visit</a
+                >
+                <a
+                  href="https://github.com/just-jatinverma/Vibe0.git"
+                  class="proj-link"
+                  >src</a
+                >
+              </div>
+            </div>
+            <div>
+              <h3 class="section-title text-lg mb-1">Vibe 0</h3>
+              <p class="text-xs text-muted leading-5">
+                AI Website Generator & Developer Sandbox
+              </p>
+            </div>
+            <p class="text-xs text-muted leading-5 flex-1">
+              An AI agent that generates full Next.js applications from chat
+              prompts, with real-time code preview and sandboxed execution.
+            </p>
+            <div class="flex flex-wrap gap-1">
+              <span class="tag">Next.js</span>
+              <span class="tag">Inngest</span>
+              <span class="tag">E2B</span>
+              <span class="tag">PostgreSQL</span>
+            </div>
+          </div>
+
+          <!-- LeetLab -->
+          <div
+            class="card reveal p-6 rounded-lg flex flex-col gap-4"
+            style="transition-delay: 0.1s"
+          >
+            <div class="flex items-start justify-between">
+              <span class="text-2xl">🧪</span>
+              <div class="flex gap-2">
+                <a href="https://leet-code-lab.vercel.app/" class="proj-link"
+                  >visit</a
+                >
+                <a
+                  href="https://github.com/just-jatinverma/LeetLab.git"
+                  class="proj-link"
+                  >src</a
+                >
+              </div>
+            </div>
+            <div>
+              <h3 class="section-title text-lg mb-1">LeetLab</h3>
+              <p class="text-xs text-muted leading-5">
+                Online Judge & Coding Practice Platform
+              </p>
+            </div>
+            <p class="text-xs text-muted leading-5 flex-1">
+              Full-stack coding platform with multi-language execution via
+              Judge0 API, Monaco editor, and robust test-case validation.
+            </p>
+            <div class="flex flex-wrap gap-1">
+              <span class="tag">Judge0</span>
+              <span class="tag">Monaco</span>
+              <span class="tag">Prisma</span>
+              <span class="tag">Node.js</span>
+            </div>
+          </div>
+
+          <!-- T3-Chat -->
+          <div
+            class="card reveal p-6 rounded-lg flex flex-col gap-4"
+            style="transition-delay: 0.2s"
+          >
+            <div class="flex items-start justify-between">
+              <span class="text-2xl">🤖</span>
+              <div class="flex gap-2">
+                <a href="https://t3-multichat.vercel.app/" class="proj-link"
+                  >visit</a
+                >
+                <a
+                  href="https://github.com/just-jatinverma/T3Chat.git"
+                  class="proj-link"
+                  >src</a
+                >
+              </div>
+            </div>
+            <div>
+              <h3 class="section-title text-lg mb-1">T3-Chat</h3>
+              <p class="text-xs text-muted leading-5">
+                Multi-Model AI Chat Application
+              </p>
+            </div>
+            <p class="text-xs text-muted leading-5 flex-1">
+              Multi-LLM chat app via OpenRouter with persistent conversation
+              history, GitHub OAuth, and a polished responsive UI.
+            </p>
+            <div class="flex flex-wrap gap-1">
+              <span class="tag">OpenRouter</span>
+              <span class="tag">Next.js</span>
+              <span class="tag">OAuth</span>
+              <span class="tag">Prisma</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="py-24 border-t border-border">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="reveal mb-12">
+          <p class="section-label mb-2">// skills</p>
+          <h2 class="section-title text-4xl md:text-5xl">Tech Stack</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-10">
+          <div class="reveal">
+            <p class="text-muted text-xs mb-6 uppercase tracking-widest">
+              Frontend
+            </p>
+            <div class="space-y-5" id="skills-fe">
+              <div class="skill-item">
+                <div class="flex justify-between text-xs mb-1">
+                  <span>React.js / Next.js</span
+                  ><span class="text-green">95%</span>
+                </div>
+                <div class="skill-bar-wrap">
+                  <div class="skill-bar" style="--w: 0.95"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <div class="flex justify-between text-xs mb-1">
+                  <span>TypeScript</span><span class="text-green">88%</span>
+                </div>
+                <div class="skill-bar-wrap">
+                  <div class="skill-bar" style="--w: 0.88"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <div class="flex justify-between text-xs mb-1">
+                  <span>Tailwind CSS</span><span class="text-green">92%</span>
+                </div>
+                <div class="skill-bar-wrap">
+                  <div class="skill-bar" style="--w: 0.92"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <div class="flex justify-between text-xs mb-1">
+                  <span>Zustand / TanStack Query</span
+                  ><span class="text-green">85%</span>
+                </div>
+                <div class="skill-bar-wrap">
+                  <div class="skill-bar" style="--w: 0.85"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal" style="transition-delay: 0.1s">
+            <p class="text-muted text-xs mb-6 uppercase tracking-widest">
+              Backend & Infra
+            </p>
+            <div class="space-y-5">
+              <div class="skill-item">
+                <div class="flex justify-between text-xs mb-1">
+                  <span>Node.js / Express</span
+                  ><span class="text-green">90%</span>
+                </div>
+                <div class="skill-bar-wrap">
+                  <div class="skill-bar" style="--w: 0.9"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <div class="flex justify-between text-xs mb-1">
+                  <span>PostgreSQL / Prisma</span
+                  ><span class="text-green">88%</span>
+                </div>
+                <div class="skill-bar-wrap">
+                  <div class="skill-bar" style="--w: 0.88"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <div class="flex justify-between text-xs mb-1">
+                  <span>AI / LLM Integration</span
+                  ><span class="text-green">87%</span>
+                </div>
+                <div class="skill-bar-wrap">
+                  <div class="skill-bar" style="--w: 0.87"></div>
+                </div>
+              </div>
+              <div class="skill-item">
+                <div class="flex justify-between text-xs mb-1">
+                  <span>Git / Vercel / Netlify</span
+                  ><span class="text-green">93%</span>
+                </div>
+                <div class="skill-bar-wrap">
+                  <div class="skill-bar" style="--w: 0.93"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- All tags -->
+        <div class="reveal mt-12 flex flex-wrap gap-2">
+          <span class="tag">React Hook Form</span>
+          <span class="tag">Clerk</span>
+          <span class="tag">Better-Auth</span>
+          <span class="tag">MongoDB</span>
+          <span class="tag">SQLite</span>
+          <span class="tag">Mongoose</span>
+          <span class="tag">Postman</span>
+          <span class="tag">Swagger</span>
+          <span class="tag">ImageKit</span>
+          <span class="tag">Inngest</span>
+          <span class="tag">E2B</span>
+          <span class="tag">Server Actions</span>
+          <span class="tag">REST APIs</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-24 border-t border-border">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="reveal mb-12">
+          <p class="section-label mb-2">// contact</p>
+          <h2 class="section-title text-4xl md:text-5xl">Let's Connect</h2>
+          <p class="text-muted text-sm mt-3 font-mono">
+            Open to roles, freelance, and cool projects.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-3 max-w-xl reveal">
+          <a
+            href="mailto:vermajatin1727@gmail.com"
+            class="contact-link rounded-lg"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
+            </svg>
+            vermajatin1727@gmail.com
+          </a>
+          <a
+            href="https://github.com/just-jatinverma"
+            target="_blank"
+            class="contact-link rounded-lg"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844a9.59 9.59 0 012.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.2 22 16.447 22 12.021 22 6.484 17.522 2 12 2z"
+              />
+            </svg>
+            just-jatinverma
+          </a>
+          <a
+            href="https://linkedin.com/in/justjatinverma"
+            target="_blank"
+            class="contact-link rounded-lg"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.27c-.97 0-1.75-.79-1.75-1.76s.78-1.75 1.75-1.75 1.75.78 1.75 1.75-.78 1.76-1.75 1.76zm13.5 11.27h-3v-5.6c0-1.34-.03-3.07-1.87-3.07-1.87 0-2.16 1.46-2.16 2.97v5.7h-3v-10h2.88v1.36h.04c.4-.76 1.38-1.56 2.84-1.56 3.04 0 3.6 2 3.6 4.59v5.61z"
+              />
+            </svg>
+            justjatinverma
+          </a>
+          <a
+            href="https://twitter.com/justjatinverma"
+            target="_blank"
+            class="contact-link rounded-lg"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+              />
+            </svg>
+            @justjatinverma
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-border py-8">
+      <div
+        class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4"
+      >
+        <span class="text-xs text-muted font-mono">
+          © 2026 <span class="text-green">Jatin Verma</span> — built with
+          Next.js & ☕
+        </span>
+        <span class="text-xs text-muted font-mono cursor">_</span>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
